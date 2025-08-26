@@ -1,0 +1,9 @@
+﻿  Source.cpp
+C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Exception.hpp(41,47): warning C4275: DLL 인터페이스가 아닌 class 'std::runtime_error'이(가) DLL 인터페이스 class 'sf::Exception'의 기본으로 사용되었습니다.
+  (소스 파일 'Source.cpp'을(를) 컴파일하는 중)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\stdexcept(100,19):
+      'std::runtime_error' 선언을 참조하십시오.
+      C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Exception.hpp(41,23):
+      'sf::Exception' 선언을 참조하십시오.
+  
+  Game asdf.vcxproj -> C:\Users\Administrator\Desktop\Game asdf\Debug\Game asdf.exe
