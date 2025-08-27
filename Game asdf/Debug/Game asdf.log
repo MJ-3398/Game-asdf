@@ -6,4 +6,16 @@ C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Exception.hpp(41,4
       C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Exception.hpp(41,23):
       'sf::Exception' 선언을 참조하십시오.
   
-  Game asdf.vcxproj -> C:\Users\Administrator\Desktop\Game asdf\Debug\Game asdf.exe
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,23): warning C4305: '인수': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,23): warning C4305:         with
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,23): warning C4305:         [
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,23): warning C4305:             T=float
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,23): warning C4305:         ]
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,19): warning C4305: '인수': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,19): warning C4305:         with
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,19): warning C4305:         [
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,19): warning C4305:             T=float
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(98,19): warning C4305:         ]
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(101,12): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(102,12): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Game asdf.vcxproj -> C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Debug\Game asdf.exe
