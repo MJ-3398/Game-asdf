@@ -52,9 +52,12 @@ class bullet
 {
 public:
 	sf::RectangleShape shape;
-	float speeds = 0.9f;
+	float speeds = 0.25f;
 	bool active = true;
 
+	static sf::Clock clock;
+	static float lastTime;
+	static constexpr float Delay = 0.15f;
 
 	bullet(float x, float y)
 	{
@@ -62,7 +65,6 @@ public:
 		shape.setFillColor(sf::Color::Yellow);
 		shape.setPosition({ x,y });
 	};
-
 	void moving()
 	{
 		shape.move({ 0,-speeds });
@@ -75,12 +77,27 @@ public:
 	{
 		return active;
 	}
-
 	void draw(sf::RenderWindow& window)
 	{
 		if (active)
 		{
 			window.draw(shape);
+		}
+	}
+	static bool Shoot() 
+	{
+		float now = clock.getElapsedTime().asSeconds();
+
+		//clock.getElapsedTime = 
+
+		if (now - lastTime >= Delay)
+		{
+			lastTime = now;
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -107,19 +124,8 @@ public:
 
 };
 
-
-#pragma region 라이브러리
-// 정적 라이브러리(.lib)
-// 프로그램 자체에 라이브러리 적용
-
-
-
-// 동적 라이브러리(.dll)
-// 외부 라이브러리 불러옴
-// 크기가 커지지 않음
-// 유연한 사용 가능
-// 업데이트가 용이함
-#pragma endregion
+sf::Clock bullet::clock;
+float bullet::lastTime = 0.0f;
 
 int main()
 {
@@ -127,6 +133,7 @@ int main()
 		
 		ship space;
 		vector<bullet> bullets;
+
 
 		while (window.isOpen())
 		{
@@ -156,7 +163,7 @@ int main()
 
 			space.Move();
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Space))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Space) && bullet::Shoot())
 			{
 				sf::Vector2f pos = space.shape.getPosition();
 				bullets.emplace_back(pos.x + 9, pos.y);
@@ -164,10 +171,7 @@ int main()
 
 			for (auto& b : bullets) b.moving();
 
-			bullets.erase(
-				std::remove_if(bullets.begin(), bullets.end(),
-					[](const bullet& b) { return !b.active1(); }),
-				bullets.end());
+			bullets.erase(std::remove_if(bullets.begin(), bullets.end(),[](const bullet& b) { return !b.active1(); }),bullets.end());
 
 			window.clear(sf::Color::Black);
 			for (auto& b : bullets) b.draw(window);
