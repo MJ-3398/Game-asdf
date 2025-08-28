@@ -88,8 +88,6 @@ public:
 	{
 		float now = clock.getElapsedTime().asSeconds();
 
-		//clock.getElapsedTime = 
-
 		if (now - lastTime >= Delay)
 		{
 			lastTime = now;
@@ -103,23 +101,15 @@ public:
 
 };
 
-class backscreen
+class Enemy
 {
 public:
-	sf::RectangleShape star;
+	sf::RectangleShape enemy;
 
-	backscreen(int st = 400)
+
+	Enemy()
 	{
-		for (int i = 0; i < st; i++)
-		{
-			star.setSize({ 0.2,0.2 });
-			star.setFillColor(sf::Color::Yellow);
-
-			float x = rand() % 1000;
-			float y = rand() % 1400;
-
-			star.setPosition({ x,y });
-		}
+		
 	}
 
 };
@@ -155,10 +145,10 @@ int main()
 						window.close();
 					}
 				}
+				// isOpen() : window가 열려 있는지 확인하는 함수
+				//pollevent(): 이벤트 큐에서 이벤트를 하나씩 꺼내서 반환합니다.
+				//	close() : window를 종료합니다.
 			}
-			// isOpen() : window가 열려 있는지 확인하는 함수
-			//pollevent(): 이벤트 큐에서 이벤트를 하나씩 꺼내서 반환합니다.
-			//	close() : window를 종료합니다.
 
 
 			space.Move();
@@ -171,7 +161,7 @@ int main()
 
 			for (auto& b : bullets) b.moving();
 
-			bullets.erase(std::remove_if(bullets.begin(), bullets.end(),[](const bullet& b) { return !b.active1(); }),bullets.end());
+			
 
 			window.clear(sf::Color::Black);
 			for (auto& b : bullets) b.draw(window);
