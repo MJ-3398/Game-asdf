@@ -5,18 +5,21 @@
 #include <time.h>
 using namespace std;
 
+#define ENEMY 9
 
 class ship
 {
 public:
 	sf::RectangleShape shape;
 
-	float speed = 0.08f;
+	float speed = 0.1f;
+
+	char HP[5] = { 1 };
 
 	ship()
 	{
 		shape.setSize({ 20,20 });
-		shape.setFillColor(sf::Color::Red);
+		shape.setFillColor(sf::Color::Green);
 		shape.setPosition({ 500,1200 });
 	};
 
@@ -88,6 +91,8 @@ public:
 	{
 		float now = clock.getElapsedTime().asSeconds();
 
+		//흘러간 시간을 반환하는 함수.
+
 		if (now - lastTime >= Delay)
 		{
 			lastTime = now;
@@ -98,19 +103,74 @@ public:
 			return false;
 		}
 	}
-
 };
+
+void removebullet(vector<bullet>& bullets)
+{
+	for (int i = 0; i < bullets.size();)
+	{
+		if (!bullets[i].active1())
+		{
+			bullets.erase(bullets.begin() + i);
+		}
+		else
+		{
+			i++;
+		}
+	}
+}
+
 
 class Enemy
 {
 public:
 	sf::RectangleShape enemy;
+	float speed = 0.12f;
 
 
-	Enemy()
+	vector<bullet> bullets;
+	sf::Clock shoot;
+	float delay = 1.0f;
+
+	Enemy(float x, float y)
 	{
-		
+		enemy.setSize({ 30,30 });
+		enemy.setFillColor(sf::Color::Red);
+		enemy.setPosition({x,y});
 	}
+
+	void move()
+	{
+		enemy.move({ 0,speed });
+		float random = rand() % 970;
+		float stop1 =  450;
+
+		//if (enemy.getPosition().y < stop1)
+		//{
+		//	enemy.move({0, speed });
+		//}
+		//else
+		//{
+		//	enemy.setPosition({ enemy.getPosition().x, stop1 });
+		//}
+
+		if (enemy.getPosition().y > 1400)
+		{
+			enemy.setPosition({random, -30});
+		}
+
+	}
+
+	void draw(sf::RenderWindow &window)
+	{
+		window.draw(enemy);
+	}
+
+	void hit()
+	{
+
+	}
+
 
 };
 
@@ -120,10 +180,19 @@ float bullet::lastTime = 0.0f;
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode({1000,1400}), "SFML Window");
-		
+	srand(time(NULL));
+
+
 		ship space;
 		vector<bullet> bullets;
+		vector<Enemy> enemy;
 
+		for (int i = 0; i < ENEMY;i++)
+		{
+			float rx = rand() & 970;
+			Enemy e(rx, -i * 150);
+			enemy.push_back(e);
+		}
 
 		while (window.isOpen())
 		{
@@ -151,24 +220,64 @@ int main()
 			}
 
 
-			space.Move();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+			space.Move();
+			window.clear(sf::Color::Black);
+#pragma region 적 및 총알
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Space) && bullet::Shoot())
 			{
 				sf::Vector2f pos = space.shape.getPosition();
-				bullets.emplace_back(pos.x + 9, pos.y);
+				bullet b(pos.x + 9, pos.y);
+				bullets.push_back(b);
 			}
 
-			for (auto& b : bullets) b.moving();
+			for (int i = 0; i < bullets.size(); ++i)
+			{
+				bullets[i].moving();
+			}
 
 			
 
-			window.clear(sf::Color::Black);
-			for (auto& b : bullets) b.draw(window);
+			for (int i = 0; i < enemy.size(); i++)
+			{
+				enemy[i].move();
+				enemy[i].draw(window);
+			}
+
+			for (int i = 0; i < bullets.size(); ++i)
+			{
+				bullets[i].draw(window);
+			}
+
+
+
+
+#pragma endregion
 			window.draw(space.shape);
+			removebullet(bullets);
 			window.display();
 		}
 
 
+
+
+
 	return 0;
 }
+
+
+//colision detection
+
