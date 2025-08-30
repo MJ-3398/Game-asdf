@@ -7,20 +7,32 @@ using namespace std;
 
 #define ENEMY 9
 
+#pragma region 구조체
 class ship
 {
 public:
 	sf::RectangleShape shape;
-
 	float speed = 0.1f;
 
-	char HP[5] = { 1 };
+	int HP = 5;
+	int Maxhp = 5;
+
+	sf::RectangleShape HPbar;
+	sf::RectangleShape HPbarless;
 
 	ship()
 	{
 		shape.setSize({ 20,20 });
 		shape.setFillColor(sf::Color::Green);
-		shape.setPosition({ 500,1200 });
+		shape.setPosition({ 500,1100 });
+
+		HPbarless.setSize(sf::Vector2f(200, 20));
+		HPbarless.setFillColor(sf::Color::White);
+		HPbarless.setPosition({20, 1100});
+
+		HPbar.setSize(sf::Vector2f(200, 20));
+		HPbar.setFillColor(sf::Color::Green);
+		HPbar.setPosition({ 20, 1100 });
 	};
 
 	void Move()
@@ -28,26 +40,34 @@ public:
 
 		sf::Vector2f movement(0, 0);
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
-			{
-				movement.x -= speed;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right))
-			{
-				movement.x += speed;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up))
-			{
-				movement.y -= speed;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Down))
-			{
-				movement.y += speed;
-			}
-	
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Left))
+		{
+			movement.x -= speed;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right))
+		{
+			movement.x += speed;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Up))
+		{
+			movement.y -= speed;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Down))
+		{
+			movement.y += speed;
+		}
+
 		shape.move(movement);
 	};
 
+	void HPdraw(sf::RenderWindow &window)
+	{
+		float hpPercent = HP * 1.0f / Maxhp;
+		HPbar.setSize(sf::Vector2f(200 * hpPercent, 20));
+
+		window.draw(HPbarless);
+		window.draw(HPbar);
+	}
 
 };
 
@@ -87,7 +107,7 @@ public:
 			window.draw(shape);
 		}
 	}
-	static bool Shoot() 
+	static bool Shoot()
 	{
 		float now = clock.getElapsedTime().asSeconds();
 
@@ -120,7 +140,6 @@ void removebullet(vector<bullet>& bullets)
 	}
 }
 
-
 class Enemy
 {
 public:
@@ -136,14 +155,14 @@ public:
 	{
 		enemy.setSize({ 30,30 });
 		enemy.setFillColor(sf::Color::Red);
-		enemy.setPosition({x,y});
+		enemy.setPosition({ x,y });
 	}
 
 	void move()
 	{
 		enemy.move({ 0,speed });
 		float random = rand() % 970;
-		float stop1 =  450;
+		float stop1 = 450;
 
 		//if (enemy.getPosition().y < stop1)
 		//{
@@ -154,14 +173,14 @@ public:
 		//	enemy.setPosition({ enemy.getPosition().x, stop1 });
 		//}
 
-		if (enemy.getPosition().y > 1400)
+		if (enemy.getPosition().y > 1200)
 		{
-			enemy.setPosition({random, -30});
+			enemy.setPosition({ random, -30 });
 		}
 
 	}
 
-	void draw(sf::RenderWindow &window)
+	void draw(sf::RenderWindow& window)
 	{
 		window.draw(enemy);
 	}
@@ -177,9 +196,11 @@ public:
 sf::Clock bullet::clock;
 float bullet::lastTime = 0.0f;
 
+#pragma endregion
+
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode({1000,1400}), "SFML Window");
+	sf::RenderWindow window(sf::VideoMode({1000,1200}), "SFML Window");
 	srand(time(NULL));
 
 
@@ -223,17 +244,6 @@ int main()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 			space.Move();
 			window.clear(sf::Color::Black);
 #pragma region 적 및 총알
@@ -267,6 +277,7 @@ int main()
 
 #pragma endregion
 			window.draw(space.shape);
+			space.HPdraw(window);
 			removebullet(bullets);
 			window.display();
 		}
