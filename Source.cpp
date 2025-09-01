@@ -90,7 +90,7 @@ public:
 	};
 	void moving()
 	{
-		shape.move({ 0,-speeds });
+		shape.move({ 0, -speeds });
 		if (shape.getPosition().y < 0)
 		{
 			active = false;
@@ -102,7 +102,7 @@ public:
 	}
 	void draw(sf::RenderWindow& window)
 	{
-		if (active)
+		if (active == true)
 		{
 			window.draw(shape);
 		}
@@ -111,7 +111,7 @@ public:
 	{
 		float now = clock.getElapsedTime().asSeconds();
 
-		//흘러간 시간을 반환하는 함수.
+		//getElapsedTime = 흘러간 시간을 반환하는 함수.
 
 		if (now - lastTime >= Delay)
 		{
@@ -164,15 +164,6 @@ public:
 		float random = rand() % 970;
 		float stop1 = 450;
 
-		//if (enemy.getPosition().y < stop1)
-		//{
-		//	enemy.move({0, speed });
-		//}
-		//else
-		//{
-		//	enemy.setPosition({ enemy.getPosition().x, stop1 });
-		//}
-
 		if (enemy.getPosition().y > 1200)
 		{
 			enemy.setPosition({ random, -30 });
@@ -193,6 +184,31 @@ public:
 
 };
 
+bool collision(sf::RectangleShape &hit, sf::RectangleShape &fit)
+{
+	sf::Vector2f hitP = hit.getPosition();
+	sf::Vector2f fitP = fit.getPosition();
+
+	sf::Vector2f hitS = hit.getSize();
+	sf::Vector2f fitS = fit.getSize();
+
+	sf::Vector2f centerH = { hitP.x + hitS.x / 2, hitP.y + hitS.y / 2 };
+	sf::Vector2f centerF = { fitP.x + fitS.x / 2, fitP.y + fitS.y / 2 };
+
+	float radiusH = std::min(hitS.x, hitS.y) / 2;
+	float radiusF = std::min(fitS.x, fitS.y) / 2;
+
+	// 거리 계산
+	float dx = centerH.x - centerF.x;
+	float dy = centerH.y - centerF.y;
+	float distance = sqrt(dx * dx + dy * dy);
+
+	// 거리 <= 반지름 합 → 충돌
+	return distance <= (radiusH + radiusF);
+
+
+}
+
 sf::Clock bullet::clock;
 float bullet::lastTime = 0.0f;
 
@@ -207,10 +223,11 @@ int main()
 		ship space;
 		vector<bullet> bullets;
 		vector<Enemy> enemy;
+		int a1 = 0; // 체력 회복용 변수
 
 		for (int i = 0; i < ENEMY;i++)
 		{
-			float rx = rand() & 970;
+			float rx = rand() % 970;
 			Enemy e(rx, -i * 150);
 			enemy.push_back(e);
 		}
@@ -265,11 +282,34 @@ int main()
 			{
 				enemy[i].move();
 				enemy[i].draw(window);
+				if (collision(space.shape, enemy[i].enemy))
+				{
+					space.HP -= 1;
+					float rx = rand() % 970;
+					enemy[i].enemy.setPosition({ rx, -30 });
+				}
 			}
+
 
 			for (int i = 0; i < bullets.size(); ++i)
 			{
 				bullets[i].draw(window);
+				for (int j = 0; j < enemy.size(); ++j)
+				{
+					
+					if (collision(bullets[i].shape, enemy[j].enemy))
+					{
+						bullets[i].active = false;
+						a1++;
+						float rx = rand() % 970;
+						enemy[j].enemy.setPosition({ rx, -30 });
+						if (a1 % 10 == 0 && space.HP < 5)
+						{
+							space.HP ++;
+							
+						}
+					}
+				}
 			}
 
 
@@ -281,9 +321,6 @@ int main()
 			removebullet(bullets);
 			window.display();
 		}
-
-
-
 
 
 	return 0;
