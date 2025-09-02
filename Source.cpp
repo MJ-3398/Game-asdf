@@ -85,7 +85,7 @@ public:
 	bullet(float x, float y)
 	{
 		shape.setSize({ 2,2 });
-		shape.setFillColor(sf::Color::Red);
+		shape.setFillColor(sf::Color::Yellow);
 		shape.setPosition({ x,y });
 	};
 	void moving()
@@ -176,10 +176,6 @@ public:
 		window.draw(enemy);
 	}
 
-	void hit()
-	{
-
-	}
 
 
 };
@@ -246,6 +242,7 @@ public:
 		shape.setSize({ 300,200 });
 		shape.setFillColor(sf::Color::Red);
 		shape.setPosition({ 350,100 });
+		spawnY = shape.getPosition().y;
 
 		Larm.setSize({ 80,40 });
 		Larm.setFillColor(sf::Color::Red);
@@ -301,8 +298,10 @@ public:
 	{
 		if (randmove.getElapsedTime().asSeconds() >= 1.0f)
 		{
-			speedX = 0.5f + float(rand() % 20)/100;
-			speedY = 0.5f + float(rand() % 20)/100;
+			dirX = (rand() % 2 == 0) ? 1 : -1;
+			dirY = (rand() % 2 == 0) ? 1 : -1;
+			speedX = 0.1f + float(rand() % 20)/100;
+			speedY = 0.1f + float(rand() % 20)/100;
 			randmove.restart();
 		}
 	}
@@ -311,31 +310,39 @@ public:
 	{
 		MovingDirection();
 
-		sf::Vector2f a1 = shape.getPosition();
+		sf::Vector2f b1 = shape.getPosition();
 
-		a1.x += speedX * dirX;
-		if (a1.x <= 0) 
+		b1.x += speedX * dirX;
+		if (b1.x <= 0) 
 		{ 
-			a1.x = 0; dirX = 1; 
+			b1.x = 0; dirX = 1; 
 		}
-		if (a1.x + shape.getSize().x >= 1000) 
+		if (b1.x + shape.getSize().x >= 1000) 
 		{
-			a1.x = 1000 - shape.getSize().x; dirX = -1; 
+			b1.x = 1000 - shape.getSize().x; dirX = -1; 
 		}
 
-		a1.y += speedY * dirY;
-		if (a1.y <= spawnY - 200)\
+		b1.y += speedY * dirY;
+		if (b1.y <= spawnY - 200)
 		{
-			a1.y = spawnY - 200; dirY = 1;
+			b1.y = spawnY - 200; dirY = 1;
 		}
-		if (a1.y >= spawnY + 200) 
+		if (b1.y >= spawnY + 200) 
 		{ 
-			a1.y = spawnY + 200; dirY = -1; 
+			b1.y = spawnY + 200; dirY = -1; 
 		}
 
-		shape.setPosition(a1);
+		shape.setPosition(b1);
 
-		Larm.setPosition(a1.x);
+		Larm.setPosition(sf::Vector2f(b1.x - 80, b1.y + 70));
+		Rarm.setPosition(sf::Vector2f(b1.x + 300, b1.y + 70));
+		LHand.setPosition(sf::Vector2f(b1.x - 180, b1.y + 40));
+		RHand.setPosition(sf::Vector2f(b1.x + 380, b1.y + 40));
+		body.setPosition(sf::Vector2f(b1.x + 90, b1.y + 200));
+
+		a1.setPosition(sf::Vector2f(b1.x + 150, b1.y + 110));
+		a2.setPosition(sf::Vector2f(b1.x - 130, b1.y + 110));
+		a3.setPosition(sf::Vector2f(b1.x + 430, b1.y + 110));
 
 	}
 
@@ -508,6 +515,7 @@ int main()
 			window.draw(space.shape);
 			if (spawn == true)
 			{
+				Boss.move();
 				window.draw(Boss.shape);
 				window.draw(Boss.Larm);
 				window.draw(Boss.Rarm);
