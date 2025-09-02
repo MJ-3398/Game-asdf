@@ -8,13 +8,67 @@ C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Exception.hpp(41,4
   
 C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(130,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
 C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(164,16): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(220,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(230,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(231,19): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(274,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(281,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(288,15): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(294,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(297,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(304,16): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Game asdf.vcxproj -> C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Debug\Game asdf.exe
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,7): error C2664: 'void sf::Transformable::setPosition(sf::Vector2f)': 인수 1을(를) 'T'에서 'sf::Vector2f'(으)로 변환할 수 없습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,7): error C2664:         with
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,7): error C2664:         [
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,7): error C2664:             T=float
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,7): error C2664:         ]
+      C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,22):
+      'sf::Vector2<float>::Vector2': 모든 인수 형식을 변환할 수 있는 오버로드된 함수가 없습니다.
+          C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Vector2.hpp(205,1):
+          'sf::Vector2<float>::Vector2(sf::Vector2<float> &&)'일 수 있습니다.
+              C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,22):
+              'sf::Vector2<float>::Vector2(sf::Vector2<float> &&)': 인수 1을(를) 'T'에서 'sf::Vector2<float> &&'(으)로 변환할 수 없습니다.
+          with
+          [
+              T=float
+          ]
+                  C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,22):
+                  원인: 'T'에서 'sf::Vector2<float>'(으)로 변환할 수 없습니다.
+          with
+          [
+              T=float
+          ]
+                  C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,22):
+                  변환하려면 둘째 사용자 정의 변환 연산자 또는 생성자가 있어야 합니다.
+          C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Vector2.hpp(205,1):
+          또는       'sf::Vector2<float>::Vector2(const sf::Vector2<float> &)'
+              C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,22):
+              'sf::Vector2<float>::Vector2(const sf::Vector2<float> &)': 인수 1을(를) 'T'에서 'const sf::Vector2<float> &'(으)로 변환할 수 없습니다.
+          with
+          [
+              T=float
+          ]
+                  C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,22):
+                  원인: 'T'에서 'const sf::Vector2<float>'(으)로 변환할 수 없습니다.
+          with
+          [
+              T=float
+          ]
+                  C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,22):
+                  변환하려면 둘째 사용자 정의 변환 연산자 또는 생성자가 있어야 합니다.
+          C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,22):
+          인수 목록 '(T)'을(를) 일치시키는 동안
+          with
+          [
+              T=float
+          ]
+      C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\Graphics\Transformable.hpp(70,10):
+      'sf::Transformable::setPosition' 선언을 참조하십시오.
+      C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(326,7):
+      인수 목록 '(T)'을(를) 일치시키는 동안
+          with
+          [
+              T=float
+          ]
+  
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(328,2): error C2143: 구문 오류: ';'이(가) '}' 앞에 없습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(372,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(387,13): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(388,19): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(435,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(442,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(449,16): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(455,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(461,24): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(468,17): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
