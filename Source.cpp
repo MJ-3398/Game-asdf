@@ -5,14 +5,14 @@
 #include <time.h>
 using namespace std;
 
-#define ENEMY 9
-
+#define ENEMY 20
+#define BossHP 120
 #pragma region 구조체
 class ship
 {
 public:
 	sf::RectangleShape shape;
-	float speed = 0.1f;
+	float speed = 0.3f;
 
 	int HP = 10;
 	int Maxhp = 10;
@@ -63,8 +63,7 @@ public:
 	void HPdraw(sf::RenderWindow &window)
 	{
 		float hpPercent = HP * 1.0f / Maxhp;
-		HPbar.setSize(sf::Vector2f(200 * hpPercent, 20));
-
+		HPbar.setSize({ 200 * hpPercent, 20 });
 		window.draw(HPbarless);
 		window.draw(HPbar);
 	}
@@ -77,29 +76,29 @@ public:
 	sf::RectangleShape shape;
 	float speeds = 0.25f;
 	bool active = true;
+	int direction;
 
 	static sf::Clock clock;
 	static float lastTime;
-	static constexpr float Delay = 0.15f;
+	static constexpr float Delay = 0.3f;
 
-	bullet(float x, float y)
+	bullet(float x, float y, int d = -1)
 	{
 		shape.setSize({ 2,2 });
 		shape.setFillColor(sf::Color::Yellow);
 		shape.setPosition({ x,y });
+		direction = d;
 	};
+
 	void moving()
 	{
-		shape.move({ 0, -speeds });
-		if (shape.getPosition().y < 0)
+		shape.move({ 0, speeds*direction });
+		if (shape.getPosition().y < 0 || shape.getPosition().y > 1200)
 		{
 			active = false;
 		}
 	}
-	bool active1() const
-	{
-		return active;
-	}
+
 	void draw(sf::RenderWindow& window)
 	{
 		if (active == true)
@@ -125,17 +124,15 @@ public:
 	}
 };
 
-void removebullet(vector<bullet>& bullets)
+void removebullet(vector<bullet>& bullets, float a = 1200)
 {
-	for (int i = 0; i < bullets.size();)
+	for (int i = bullets.size() - 1; i >= 0; i--)
 	{
-		if (!bullets[i].active1())
+		sf::Vector2f coord = bullets[i].shape.getPosition();
+
+		if (!bullets[i].active || coord.y < -10 || coord.y > a + 10)
 		{
 			bullets.erase(bullets.begin() + i);
-		}
-		else
-		{
-			i++;
 		}
 	}
 }
@@ -144,12 +141,11 @@ class Enemy
 {
 public:
 	sf::RectangleShape enemy;
-	float speed = 0.12f;
 
-
-	vector<bullet> bullets;
-	sf::Clock shoot;
-	float delay = 1.0f;
+	sf::Clock randmove;
+	float speedX = 0.7f;
+	float speedY = 0.2f;
+	int dirX = 1;
 
 	Enemy(float x, float y)
 	{
@@ -160,23 +156,37 @@ public:
 
 	void move()
 	{
-		enemy.move({ 0,speed });
-		float random = rand() % 970;
-		float stop1 = 450;
+		enemy.move({ speedX * dirX ,speedY });
+
+		if (randmove.getElapsedTime().asSeconds() >= 1.0f)
+		{
+			dirX = (rand() % 2 == 0) ? 1 : -1;
+			speedX = 0.05f + float(rand() % 10) / 100;
+			randmove.restart();
+		}
 
 		if (enemy.getPosition().y > 1200)
 		{
+			float random = rand() % 970;
 			enemy.setPosition({ random, -30 });
 		}
 
+		if (enemy.getPosition().x <= 0)
+		{
+			enemy.setPosition({ 0, enemy.getPosition().y });
+			dirX = 1;
+		}
+		if (enemy.getPosition().x + enemy.getSize().x >= 1000)
+		{
+			enemy.setPosition({ 1000 - enemy.getSize().x, enemy.getPosition().y });
+			dirX = -1;
+		}
 	}
 
 	void draw(sf::RenderWindow& window)
 	{
 		window.draw(enemy);
 	}
-
-
 
 };
 
@@ -209,22 +219,28 @@ float bullet::lastTime = 0.0f;
 class Boss
 {
 public:
+#pragma region 보스 형태
 	sf::RectangleShape shape;
 	sf::RectangleShape Larm;
 	sf::RectangleShape Rarm;
 	sf::RectangleShape LHand;
 	sf::RectangleShape RHand;
 	sf::RectangleShape body;
-	sf::RectangleShape gun;
 	sf::CircleShape a1;
 	sf::CircleShape a2;
 	sf::CircleShape a3;
 
-	int HP = 120;
-	int Maxhp = 120;
+	sf::RectangleShape gun1;
+	sf::RectangleShape gun2;
+	sf::RectangleShape gun3;
+	sf::RectangleShape gun4;
+
+	int HP = BossHP;
+	int Maxhp = BossHP;
 
 	sf::RectangleShape HPbar;
 	sf::RectangleShape HPbarless;
+#pragma endregion
 
 	sf::Clock randmove;
 
@@ -234,8 +250,11 @@ public:
 	int dirY = 1;
 	float spawnY;
 
+	vector<bullet> bullets;
+	sf::Clock shoot;
+	float delay = 0.2f;
 
-
+	sf::Vector2f Size = { 20,40 };
 	Boss()
 	{
 #pragma region bossshape
@@ -283,6 +302,15 @@ public:
 		a3.setPosition({ 780,210 });
 		a3.setOutlineThickness({ 7 });
 		a3.setOutlineColor(sf::Color::Black);
+
+		gun1.setSize(Size);
+		gun1.setFillColor(sf::Color::White);
+		gun2.setSize(Size);
+		gun2.setFillColor(sf::Color::White);
+		gun3.setSize(Size);
+		gun3.setFillColor(sf::Color::White);
+		gun4.setSize(Size);
+		gun4.setFillColor(sf::Color::White);
 #pragma endregion
 
 		HPbarless.setSize(sf::Vector2f(200, 20));
@@ -344,18 +372,72 @@ public:
 		a2.setPosition(sf::Vector2f(b1.x - 130, b1.y + 110));
 		a3.setPosition(sf::Vector2f(b1.x + 430, b1.y + 110));
 
+		gun1.setPosition(sf::Vector2f(b1.x - 170, b1.y + 190));
+		gun2.setPosition(sf::Vector2f(b1.x - 110, b1.y + 190));
+		gun3.setPosition(sf::Vector2f(b1.x + 390, b1.y + 190));
+		gun4.setPosition(sf::Vector2f(b1.x + 450, b1.y + 190));
+
 	}
 
 	void HPdraw(sf::RenderWindow& window)
 	{
 		float hpPercent = HP * 1.0f / Maxhp;
 
-		float MaxHP1 = Maxhp * 1.0f / Maxhp;
-
 		HPbar.setSize(sf::Vector2f(900 * hpPercent, 20));
-		HPbarless.setSize(sf::Vector2f(900 * MaxHP1, 20));
+		HPbarless.setSize({ 900, 20 });
 		window.draw(HPbarless);
 		window.draw(HPbar);
+	}
+
+	void Reset()
+	{
+		HP = Maxhp;
+		spawnY = 100;
+		shape.setPosition({ 350, spawnY });
+		Larm.setPosition({ 270,170 });
+		Rarm.setPosition({ 650,170 });
+		LHand.setPosition({ 170,140 });
+		RHand.setPosition({ 730,140 });
+		body.setPosition({ 440,300 });
+		a1.setPosition({ 500,210 });
+		a2.setPosition({ 220,210 });
+		a3.setPosition({ 780,210 });
+	}
+
+	void shooting()
+	{
+		if (shoot.getElapsedTime().asSeconds() >= delay)
+		{
+			bullets.emplace_back(gun1.getPosition().x + gun1.getSize().x / 2, gun1.getPosition().y + gun1.getSize().y, 1);
+			bullets.emplace_back(gun2.getPosition().x + gun2.getSize().x / 2, gun2.getPosition().y + gun2.getSize().y, 1);
+			bullets.emplace_back(gun3.getPosition().x + gun3.getSize().x / 2, gun3.getPosition().y + gun3.getSize().y, 1);
+			bullets.emplace_back(gun4.getPosition().x + gun4.getSize().x / 2, gun4.getPosition().y + gun4.getSize().y, 1);
+
+			shoot.restart();
+		}
+
+	}
+
+	void MoveBullets()
+	{
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			bullets[i].moving();
+		}
+		for (int i = bullets.size() - 1; i >= 0; i--)
+		{
+			if (!bullets[i].active)
+			{
+				bullets.erase(bullets.begin() + i);
+			}
+		}
+	}
+	void DrawBullets(sf::RenderWindow& window)
+	{
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			bullets[i].draw(window);
+		}
 	}
 };
 
@@ -385,64 +467,147 @@ bool bosscollision(sf::RectangleShape& hit, sf::CircleShape& fit)
 
 #pragma endregion
 
+void Explain(sf::RenderWindow& window, sf::Font& font)
+{
+	sf::Text controls(font, sf::String("Game Clear\n Press 'R' to Restart Game"), 48);
+	controls.setFont(font);
+	controls.setCharacterSize(20);
+	controls.setFillColor(sf::Color::White);
+	controls.setPosition({ 550, 1050 });
+
+	controls.setString("If Player kills 10 enemies, Heal 1 time.\n If Player damagies 20 times to boss, Heal 1 time.\n Arrow Key : Move\nSpace : Shoot");
+
+	window.draw(controls);
+}
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode({1000,1200}), "SFML Window");
+	sf::RenderWindow window(sf::VideoMode({ 1000,1200 }), "SFML Window");
 	srand(time(NULL));
 
+	ship space;
+	vector<bullet> bullets;
+	vector<Enemy> enemy;
+	Boss Boss;
 
-		ship space;
-		vector<bullet> bullets;
-		vector<Enemy> enemy;
-		Boss Boss;
+	for (int i = 0; i < ENEMY;i++)
+	{
+		float rx = rand() % 970;
+		Enemy e(rx, -i * 150);
+		enemy.push_back(e);
+	}
 
-		int a1 = 0; // 체력 회복용 변수
+	int a1 = 0; // 체력 회복용 변수들
+	int a2 = 0;
 
-		sf::Clock Bossspawn;
-		bool spawn = false;
+#pragma region 보스몹 관련
+	sf::Clock Bossspawn;
+	bool spawn = false;
+	float bosscount = 50.0f;
 
-		for (int i = 0; i < ENEMY;i++)
+	sf::Font font;
+	if (!font.openFromFile("arial.ttf"))
+	{
+		return -1;
+	}
+	sf::Text text(font, sf::String("0"), 24);
+	text.setFillColor(sf::Color::White);
+	text.setPosition({ 50, 1050 });
+
+	sf::Text clear(font, sf::String("Game Clear\n Press 'R' to Restart Game"), 48);
+	clear.setFillColor(sf::Color::White);
+	clear.setPosition({ 250, 600 });
+
+	sf::Text gameOver(font, sf::String("Game Over\n Press 'R' to Restart Game"), 48);
+	gameOver.setFillColor(sf::Color::Red);
+	gameOver.setPosition({ 250, 600 });
+
+	bool bossalive = true;
+	bool bossdie = false;
+	bool gameover = false;
+#pragma endregion
+
+	while (window.isOpen())
+	{
+		while (const std::optional event = window.pollEvent())
 		{
-			float rx = rand() % 970;
-			Enemy e(rx, -i * 150);
-			enemy.push_back(e);
-		}
+			//std::optional : 이벤트가 존재할 경우에만 처리합니다.
 
-		while (window.isOpen())
-		{
-			while (const std::optional event = window.pollEvent())
+			// is<sf::Event::Closed>() : 이벤트의 형태가 closed인지 확인합니다.
+			if (event->is<sf::Event::Closed>())
 			{
-				//std::optional : 이벤트가 존재할 경우에만 처리합니다.
 
-				// is<sf::Event::Closed>() : 이벤트의 형태가 closed인지 확인합니다.
-				if (event->is<sf::Event::Closed>())
+				window.close();
+			}
+			else if (const auto* key = event->getIf<sf::Event::KeyPressed>())
+			{
+				//getIf<sf::Event::KeyPressed()> : 이벤트의 키보트 키가 입력되었는지 확인
+				if (key->scancode == sf::Keyboard::Scancode::Escape)
 				{
-
 					window.close();
 				}
-				else if (const auto* key = event->getIf<sf::Event::KeyPressed>())
-				{
-					//getIf<sf::Event::KeyPressed()> : 이벤트의 키보트 키가 입력되었는지 확인
-					if (key->scancode == sf::Keyboard::Scancode::Escape)
-					{
-						window.close();
-					}
-				}
-				// isOpen() : window가 열려 있는지 확인하는 함수
-				//pollevent(): 이벤트 큐에서 이벤트를 하나씩 꺼내서 반환합니다.
-				//	close() : window를 종료합니다.
 			}
+			// isOpen() : window가 열려 있는지 확인하는 함수
+			//pollevent(): 이벤트 큐에서 이벤트를 하나씩 꺼내서 반환합니다.
+			//	close() : window를 종료합니다.
+		}
 
+#pragma region 보스몹 생성/ 게임 리셋
 
-			float spawnboss = Bossspawn.getElapsedTime().asSeconds();
-			if (spawnboss >= 1.0f)
+		//게임 클리어(보스 제거 시)
+		if (spawn == true && Boss.HP <= 0)
+		{
+			bossalive = false;
+			bossdie = true;
+		}
+		//게임 패배(체력 끝)
+		if (space.HP <= 0)
+		{
+			gameover = true;
+		}
+
+		if (((bossdie == true) || (gameover == true)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::R))
+		{
+			Boss.Reset();
+			bossalive = true;
+			bossdie = false;
+			spawn = false;
+			gameover = false;
+			Bossspawn.restart();
+			space.HP = space.Maxhp;
+			bullets.clear();
+			enemy.clear();
+
+			for (int i = 0; i < ENEMY; i++)
 			{
-				spawn = true;
+				float rx = rand() % 970;
+				Enemy e(rx, -i * 150);
+				enemy.push_back(e);
 			}
+			a1 = 0;
+			a2 = 0;
+		}
 
+		float spawnboss = Bossspawn.getElapsedTime().asSeconds();
+		float c1 = bosscount - spawnboss;
+		if (c1 <= 1.0f)
+		{
+			c1 = 0.0f;
+		}
+		if (spawnboss >= 50.0f)
+		{
+			spawn = true;
+		}
+		if (c1 >= 0.0f)
+		{
+			text.setString(sf::String(std::to_string(c1)));
+		}
 
+#pragma endregion
+		window.clear(sf::Color::Black);
+
+		if (gameover == false)
+		{
 			space.Move();
-			window.clear(sf::Color::Black);
 #pragma region 적 및 총알
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Space) && bullet::Shoot())
 			{
@@ -455,6 +620,7 @@ int main()
 			{
 				bullets[i].moving();
 			}
+			removebullet(bullets);
 
 			if (spawn == false)
 			{
@@ -462,6 +628,7 @@ int main()
 				{
 					enemy[i].move();
 					enemy[i].draw(window);
+
 					if (collision(space.shape, enemy[i].enemy))
 					{
 						space.HP -= 1;
@@ -470,7 +637,11 @@ int main()
 					}
 				}
 			}
+			Boss.MoveBullets();
 
+
+
+			//적 충돌 및 회복
 			for (int i = 0; i < bullets.size(); ++i)
 			{
 				bullets[i].draw(window);
@@ -479,14 +650,13 @@ int main()
 				{
 					for (int j = 0; j < enemy.size(); ++j)
 					{
-
 						if (collision(bullets[i].shape, enemy[j].enemy))
 						{
 							bullets[i].active = false;
 							a1++;
 							float rx = rand() % 970;
 							enemy[j].enemy.setPosition({ rx, -30 });
-							if (a1 % 10 == 0 && space.HP < 5)
+							if (a1 % 10 == 0 && space.HP < 10)
 							{
 								space.HP++;
 
@@ -498,41 +668,86 @@ int main()
 				{
 					bullets[i].active = false;
 					Boss.HP -= 1;
+					a2++;
+					if (a2 % 20 == 0 && space.HP < 10)
+					{
+						space.HP++;
+
+					}
 				}
 				if (spawn == true && bosscollision(bullets[i].shape, Boss.a2))
 				{
 					bullets[i].active = false;
 					Boss.HP -= 1;
+					a2++;
+					if (a2 % 20 == 0 && space.HP < 10)
+					{
+						space.HP++;
+
+					}
 				}
 				if (spawn == true && bosscollision(bullets[i].shape, Boss.a3))
 				{
 					bullets[i].active = false;
 					Boss.HP -= 1;
+					a2++;
+					if (a2 % 20 == 0 && space.HP < 10)
+					{
+						space.HP++;
+
+					}
+				}
+			}
+
+			//보스 충돌
+			for (int i = 0; i < Boss.bullets.size(); i++)
+			{
+				if (collision(Boss.bullets[i].shape, space.shape))
+				{
+					Boss.bullets[i].active = false;
+					space.HP--;
 				}
 			}
 
 #pragma endregion
-			window.draw(space.shape);
-			if (spawn == true)
-			{
-				Boss.move();
-				window.draw(Boss.shape);
-				window.draw(Boss.Larm);
-				window.draw(Boss.Rarm);
-				window.draw(Boss.RHand);
-				window.draw(Boss.LHand);
-				window.draw(Boss.body);
-				window.draw(Boss.a1);
-				window.draw(Boss.a2);
-				window.draw(Boss.a3);
-				Boss.HPdraw(window);
-			}
-
-			space.HPdraw(window);
-			removebullet(bullets);
-			window.display();
+		}
+		window.draw(space.shape);
+		if ((spawn == true && bossalive == true) && gameover == false)
+		{
+			Boss.move();
+			window.draw(Boss.shape);
+			window.draw(Boss.Larm);
+			window.draw(Boss.Rarm);
+			window.draw(Boss.RHand);
+			window.draw(Boss.LHand);
+			window.draw(Boss.body);
+			window.draw(Boss.a1);
+			window.draw(Boss.a2);
+			window.draw(Boss.a3);
+			window.draw(Boss.gun1);
+			window.draw(Boss.gun2);
+			window.draw(Boss.gun3);
+			window.draw(Boss.gun4);
+			Boss.HPdraw(window);
+			Boss.shooting();
+			Boss.MoveBullets();
+			Boss.DrawBullets(window);
 		}
 
+		space.HPdraw(window);
+		window.draw(text);
+		if (bossalive == false)
+		{
+			window.draw(clear);
+		}
 
+		if (gameover == true)
+		{
+			window.draw(gameOver);
+		}
+
+		Explain(window, font);
+		window.display();
+	}
 	return 0;
 }
