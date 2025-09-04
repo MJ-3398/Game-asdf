@@ -5,7 +5,7 @@
 #include <time.h>
 using namespace std;
 
-#define ENEMY 20
+#define ENEMY 50
 #define BossHP 120
 #pragma region 구조체
 class ship
@@ -74,17 +74,17 @@ class bullet
 {
 public:
 	sf::RectangleShape shape;
-	float speeds = 0.25f;
+	float speeds = 0.6f;
 	bool active = true;
 	int direction;
 
 	static sf::Clock clock;
 	static float lastTime;
-	static constexpr float Delay = 0.3f;
+	static constexpr float Delay = 0.16f;
 
 	bullet(float x, float y, int d = -1)
 	{
-		shape.setSize({ 2,2 });
+		shape.setSize({ 8,8 });
 		shape.setFillColor(sf::Color::Yellow);
 		shape.setPosition({ x,y });
 		direction = d;
@@ -234,6 +234,7 @@ public:
 	sf::RectangleShape gun2;
 	sf::RectangleShape gun3;
 	sf::RectangleShape gun4;
+	sf::RectangleShape gun5;
 
 	int HP = BossHP;
 	int Maxhp = BossHP;
@@ -244,17 +245,19 @@ public:
 
 	sf::Clock randmove;
 
-	float speedX = 0.5f;
-	float speedY = 0.3f;
+	
+	float speedX = 7.0f;
+	float speedY = 4.0f;
 	int dirX = 1;
 	int dirY = 1;
 	float spawnY;
 
 	vector<bullet> bullets;
 	sf::Clock shoot;
-	float delay = 0.2f;
+	float rs = rand() % 970;
+	float delay = 0.15f;
 
-	sf::Vector2f Size = { 20,40 };
+	sf::Vector2f Size = { 20,80 };
 	Boss()
 	{
 #pragma region bossshape
@@ -311,6 +314,8 @@ public:
 		gun3.setFillColor(sf::Color::White);
 		gun4.setSize(Size);
 		gun4.setFillColor(sf::Color::White);
+		gun5.setSize({60, 120});
+		gun5.setFillColor(sf::Color::White);
 #pragma endregion
 
 		HPbarless.setSize(sf::Vector2f(200, 20));
@@ -351,13 +356,13 @@ public:
 		}
 
 		b1.y += speedY * dirY;
-		if (b1.y <= spawnY - 200)
+		if (b1.y <= spawnY - 100)
 		{
-			b1.y = spawnY - 200; dirY = 1;
+			b1.y = spawnY - 100; dirY = 1;
 		}
-		if (b1.y >= spawnY + 200) 
+		if (b1.y >= spawnY + 100) 
 		{ 
-			b1.y = spawnY + 200; dirY = -1; 
+			b1.y = spawnY + 100; dirY = -1; 
 		}
 
 		shape.setPosition(b1);
@@ -372,11 +377,11 @@ public:
 		a2.setPosition(sf::Vector2f(b1.x - 130, b1.y + 110));
 		a3.setPosition(sf::Vector2f(b1.x + 430, b1.y + 110));
 
-		gun1.setPosition(sf::Vector2f(b1.x - 170, b1.y + 190));
-		gun2.setPosition(sf::Vector2f(b1.x - 110, b1.y + 190));
-		gun3.setPosition(sf::Vector2f(b1.x + 390, b1.y + 190));
-		gun4.setPosition(sf::Vector2f(b1.x + 450, b1.y + 190));
-
+		gun1.setPosition(sf::Vector2f(b1.x - 170, b1.y + 240));
+		gun2.setPosition(sf::Vector2f(b1.x - 110, b1.y + 240));
+		gun3.setPosition(sf::Vector2f(b1.x + 390, b1.y + 240));
+		gun4.setPosition(sf::Vector2f(b1.x + 450, b1.y + 240));
+		gun5.setPosition(sf::Vector2f(b1.x + 120, b1.y + 430));
 	}
 
 	void HPdraw(sf::RenderWindow& window)
@@ -412,7 +417,7 @@ public:
 			bullets.emplace_back(gun2.getPosition().x + gun2.getSize().x / 2, gun2.getPosition().y + gun2.getSize().y, 1);
 			bullets.emplace_back(gun3.getPosition().x + gun3.getSize().x / 2, gun3.getPosition().y + gun3.getSize().y, 1);
 			bullets.emplace_back(gun4.getPosition().x + gun4.getSize().x / 2, gun4.getPosition().y + gun4.getSize().y, 1);
-
+			bullets.emplace_back(gun5.getPosition().x + gun5.getSize().x / 2, gun5.getPosition().y + gun5.getSize().y, 1);
 			shoot.restart();
 		}
 
@@ -499,10 +504,10 @@ int main()
 	int a1 = 0; // 체력 회복용 변수들
 	int a2 = 0;
 
-#pragma region 보스몹 관련
+#pragma region 텍스트 관련
 	sf::Clock Bossspawn;
 	bool spawn = false;
-	float bosscount = 50.0f;
+	float bosscount = 100.0f;
 
 	sf::Font font;
 	if (!font.openFromFile("arial.ttf"))
@@ -593,7 +598,7 @@ int main()
 		{
 			c1 = 0.0f;
 		}
-		if (spawnboss >= 50.0f)
+		if (spawnboss >= 100.0f)
 		{
 			spawn = true;
 		}
@@ -728,6 +733,7 @@ int main()
 			window.draw(Boss.gun2);
 			window.draw(Boss.gun3);
 			window.draw(Boss.gun4);
+			window.draw(Boss.gun5);
 			Boss.HPdraw(window);
 			Boss.shooting();
 			Boss.MoveBullets();
