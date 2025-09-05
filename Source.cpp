@@ -5,7 +5,7 @@
 #include <time.h>
 using namespace std;
 
-#define ENEMY 30
+#define ENEMY 40
 #define BossHP 60
 #pragma region ±¸Á¶Ã¼
 class ship
