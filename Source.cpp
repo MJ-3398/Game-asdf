@@ -6,7 +6,7 @@
 using namespace std;
 
 #define ENEMY 30
-#define BossHP 50
+#define BossHP 60
 #pragma region ±¸Á¶Ã¼
 class ship
 {
