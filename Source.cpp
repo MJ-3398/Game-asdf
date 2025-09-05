@@ -5,14 +5,14 @@
 #include <time.h>
 using namespace std;
 
-#define ENEMY 50
-#define BossHP 120
+#define ENEMY 30
+#define BossHP 50
 #pragma region 구조체
 class ship
 {
 public:
 	sf::RectangleShape shape;
-	float speed = 0.3f;
+	float speed = 0.14f;
 
 	int HP = 10;
 	int Maxhp = 10;
@@ -74,7 +74,7 @@ class bullet
 {
 public:
 	sf::RectangleShape shape;
-	float speeds = 0.6f;
+	float speeds;
 	bool active = true;
 	int direction;
 
@@ -82,12 +82,13 @@ public:
 	static float lastTime;
 	static constexpr float Delay = 0.16f;
 
-	bullet(float x, float y, int d = -1)
+	bullet(float x, float y, int d = -1, float s = 0.15f)
 	{
 		shape.setSize({ 8,8 });
 		shape.setFillColor(sf::Color::Yellow);
 		shape.setPosition({ x,y });
 		direction = d;
+		speeds = s;
 	};
 
 	void moving()
@@ -143,8 +144,8 @@ public:
 	sf::RectangleShape enemy;
 
 	sf::Clock randmove;
-	float speedX = 0.7f;
-	float speedY = 0.2f;
+	float speedX = 0.03f;
+	float speedY = 0.05f;
 	int dirX = 1;
 
 	Enemy(float x, float y)
@@ -246,8 +247,8 @@ public:
 	sf::Clock randmove;
 
 	
-	float speedX = 7.0f;
-	float speedY = 4.0f;
+	float speedX = 0.4f;
+	float speedY = 1.2f;
 	int dirX = 1;
 	int dirY = 1;
 	float spawnY;
@@ -255,7 +256,7 @@ public:
 	vector<bullet> bullets;
 	sf::Clock shoot;
 	float rs = rand() % 970;
-	float delay = 0.15f;
+	float delay = 0.2f;
 
 	sf::Vector2f Size = { 20,80 };
 	Boss()
@@ -333,8 +334,8 @@ public:
 		{
 			dirX = (rand() % 2 == 0) ? 1 : -1;
 			dirY = (rand() % 2 == 0) ? 1 : -1;
-			speedX = 0.1f + float(rand() % 20)/100;
-			speedY = 0.1f + float(rand() % 20)/100;
+			speedX = 0.1f + float(rand() % 5)/1000;
+			speedY = 0.1f + float(rand() % 5)/1000;
 			randmove.restart();
 		}
 	}
@@ -413,11 +414,11 @@ public:
 	{
 		if (shoot.getElapsedTime().asSeconds() >= delay)
 		{
-			bullets.emplace_back(gun1.getPosition().x + gun1.getSize().x / 2, gun1.getPosition().y + gun1.getSize().y, 1);
-			bullets.emplace_back(gun2.getPosition().x + gun2.getSize().x / 2, gun2.getPosition().y + gun2.getSize().y, 1);
-			bullets.emplace_back(gun3.getPosition().x + gun3.getSize().x / 2, gun3.getPosition().y + gun3.getSize().y, 1);
-			bullets.emplace_back(gun4.getPosition().x + gun4.getSize().x / 2, gun4.getPosition().y + gun4.getSize().y, 1);
-			bullets.emplace_back(gun5.getPosition().x + gun5.getSize().x / 2, gun5.getPosition().y + gun5.getSize().y, 1);
+			bullets.emplace_back(gun1.getPosition().x + gun1.getSize().x / 2, gun1.getPosition().y + gun1.getSize().y, 1, 0.03f);
+			bullets.emplace_back(gun2.getPosition().x + gun2.getSize().x / 2, gun2.getPosition().y + gun2.getSize().y, 1, 0.05f);
+			bullets.emplace_back(gun3.getPosition().x + gun3.getSize().x / 2, gun3.getPosition().y + gun3.getSize().y, 1, 0.04f);
+			bullets.emplace_back(gun4.getPosition().x + gun4.getSize().x / 2, gun4.getPosition().y + gun4.getSize().y, 1, 0.04f);
+			bullets.emplace_back(gun5.getPosition().x + gun5.getSize().x / 2, gun5.getPosition().y + gun5.getSize().y, 1, 0.03f);
 			shoot.restart();
 		}
 
@@ -507,7 +508,7 @@ int main()
 #pragma region 텍스트 관련
 	sf::Clock Bossspawn;
 	bool spawn = false;
-	float bosscount = 100.0f;
+	float bosscount = 50.0f;
 
 	sf::Font font;
 	if (!font.openFromFile("arial.ttf"))
@@ -598,7 +599,7 @@ int main()
 		{
 			c1 = 0.0f;
 		}
-		if (spawnboss >= 100.0f)
+		if (spawnboss >= 50.0f)
 		{
 			spawn = true;
 		}

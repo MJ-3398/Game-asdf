@@ -6,20 +6,20 @@ C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Exception.hpp(41,4
       C:\Users\Administrator\Desktop\SFML-3.0.0\include\SFML\System\Exception.hpp(41,23):
       'sf::Exception' 선언을 참조하십시오.
   
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(170,17): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(257,20): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(428,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(442,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(490,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(499,12): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(500,18): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(587,14): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(588,20): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(624,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(632,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(640,16): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(650,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(656,24): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(662,17): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(708,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(171,17): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(258,20): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(429,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(443,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(491,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(500,12): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(501,18): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(588,14): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(589,20): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(625,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(633,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(641,16): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(651,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(657,24): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(663,17): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Source.cpp(709,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   Game asdf.vcxproj -> C:\Users\Administrator\Desktop\Game-asdf\Game-asdf\Debug\Game asdf.exe
