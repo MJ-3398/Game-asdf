@@ -6,7 +6,7 @@
 using namespace std;
 
 #define ENEMY 40
-#define BossHP 60
+#define BossHP 80
 #pragma region ±¸Á¶Ã¼
 class ship
 {
@@ -416,9 +416,9 @@ public:
 		{
 			bullets.emplace_back(gun1.getPosition().x + gun1.getSize().x / 2, gun1.getPosition().y + gun1.getSize().y, 1, 0.03f);
 			bullets.emplace_back(gun2.getPosition().x + gun2.getSize().x / 2, gun2.getPosition().y + gun2.getSize().y, 1, 0.05f);
-			bullets.emplace_back(gun3.getPosition().x + gun3.getSize().x / 2, gun3.getPosition().y + gun3.getSize().y, 1, 0.04f);
+			bullets.emplace_back(gun3.getPosition().x + gun3.getSize().x / 2, gun3.getPosition().y + gun3.getSize().y, 1, 0.045f);
 			bullets.emplace_back(gun4.getPosition().x + gun4.getSize().x / 2, gun4.getPosition().y + gun4.getSize().y, 1, 0.04f);
-			bullets.emplace_back(gun5.getPosition().x + gun5.getSize().x / 2, gun5.getPosition().y + gun5.getSize().y, 1, 0.03f);
+			bullets.emplace_back(gun5.getPosition().x + gun5.getSize().x / 2, gun5.getPosition().y + gun5.getSize().y, 1, 0.035f);
 			shoot.restart();
 		}
 
