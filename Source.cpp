@@ -481,7 +481,7 @@ void Explain(sf::RenderWindow& window, sf::Font& font)
 	controls.setFillColor(sf::Color::White);
 	controls.setPosition({ 550, 1050 });
 
-	controls.setString("If Player kills 10 enemies, Heal 1 time.\n If Player damagies 20 times to boss, Heal 1 time.\n Arrow Key : Move\nSpace : Shoot");
+	controls.setString("If Player kills 10 enemies, Heal 1 time.\n If Player damages 20 times to boss, Heal 1 time.\n Arrow Key : Move\nSpace : Shoot");
 
 	window.draw(controls);
 }
